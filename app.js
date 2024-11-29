@@ -10,6 +10,7 @@ const corsConfig = require("./config/cors");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
+const grabExpressRouter = require("./routes/grabExpress");
 
 const authMiddleware = require("./middleware/auth");
 
@@ -32,6 +33,7 @@ app.use(corsConfig);
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/auth", authRouter);
+app.use("/grab-express", grabExpressRouter);
 
 app.get("/profile", authMiddleware, (req, res) => {
   res.send("This is a protected profile page.");
