@@ -7,9 +7,6 @@ A simple Express.js project to demonstrate basic API functionality with Express.
 - [Description](#description)
 - [Installation](#installation)
 - [Usage](#usage)
-- [API Endpoints](#api-endpoints)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Description
 
