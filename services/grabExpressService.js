@@ -35,9 +35,9 @@ const grabExpressService = {
       );
 
       return this.token;
-    } catch (err) {
-      console.error("Error fetching auth token:", err.response?.data);
-      throw err;
+    } catch (error) {
+      console.error("Error fetching auth token:", error.response?.data);
+      throw error;
     }
   },
 
@@ -54,9 +54,9 @@ const grabExpressService = {
         }
       );
       return response.data;
-    } catch (err) {
-      console.error("Error creating order with Grab Express:", err);
-      throw err;
+    } catch (error) {
+      console.error("Error creating order with Grab Express:", error);
+      throw error;
     }
   },
 
@@ -72,9 +72,9 @@ const grabExpressService = {
         }
       );
       return response.data;
-    } catch (err) {
-      console.log("Error fetching order status from Grab Express:", err);
-      throw err;
+    } catch (error) {
+      console.log("Error fetching order status from Grab Express:", error);
+      throw error;
     }
   },
 };

@@ -22,8 +22,8 @@ router.post("/register", async (req, res) => {
     });
 
     res.status(201).send("User registered successfully");
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     res.status(500).send("Error registering user");
   }
 });
@@ -43,8 +43,8 @@ router.post("/login", async (req, res) => {
     });
 
     res.json({ token });
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     res.status(500).send("Error logging in");
   }
 });
