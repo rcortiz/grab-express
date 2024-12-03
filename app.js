@@ -6,6 +6,7 @@ const logger = require("morgan");
 const dotenv = require("dotenv");
 const helmetConfig = require("./config/helmet");
 const corsConfig = require("./config/cors");
+const sessionConfig = require("./config/session");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -29,6 +30,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(helmetConfig());
 app.use(corsConfig);
+app.use(sessionConfig());
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);

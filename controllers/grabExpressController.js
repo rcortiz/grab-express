@@ -4,8 +4,10 @@ const grabExpressController = {
   getDeliveryQuotes: async (req, res) => {
     try {
       const deliveryDetails = req.body;
+      const token = await grabExpressService.getAuthToken(req);
       const response = await grabExpressService.getDeliveryQuotes(
-        deliveryDetails
+        deliveryDetails,
+        token
       );
       res.status(201).json(response);
     } catch (error) {
@@ -17,8 +19,10 @@ const grabExpressController = {
   createDeliveryRequest: async (req, res) => {
     try {
       const deliveryDetails = req.body;
+      const token = await grabExpressService.getAuthToken(req);
       const response = await grabExpressService.createDeliveryRequest(
-        deliveryDetails
+        deliveryDetails,
+        token
       );
       res.stsatus(201).json(response);
     } catch (error) {
@@ -30,7 +34,11 @@ const grabExpressController = {
   getDeliveryDetails: async (req, res) => {
     try {
       const { deliveryID } = req.params;
-      const response = await grabExpressService.getDeliveryDetails(deliveryID);
+      const token = await grabExpressService.getAuthToken(req);
+      const response = await grabExpressService.getDeliveryDetails(
+        deliveryID,
+        req
+      );
       res.status(200).json(response);
     } catch (error) {
       console.error("Error fetching delivery details:", error);
@@ -41,7 +49,11 @@ const grabExpressController = {
   cancelDelivery: async (req, res) => {
     try {
       const { deliveryID } = req.params;
-      const response = await grabExpressService.cancelDelivery(deliveryID);
+      const token = await grabExpressService.getAuthToken(req);
+      const response = await grabExpressService.cancelDelivery(
+        deliveryID,
+        token
+      );
       res.status(200).json(response);
     } catch (error) {
       console.error("Error cancelling delivery:", error);

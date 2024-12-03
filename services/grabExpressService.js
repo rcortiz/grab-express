@@ -6,11 +6,16 @@ const grabExpressService = {
   tokenExpiration: null,
 
   // Authentication purposes before using GrabExpress API
-  getAuthToken: async () => {
+  getAuthToken: async (req) => {
     const now = new Date();
 
-    if (this.token && this.tokenExpiration && now < this.tokenExpiration) {
-      return this.token;
+    // Check if token is stored in session and if it has expired
+    if (
+      req.session.token &&
+      req.session.tokenExpiration &&
+      now < req.session.tokenExpiration
+    ) {
+      return req.session.token;
     }
 
     try {
@@ -30,12 +35,12 @@ const grabExpressService = {
         }
       );
 
-      this.token = response.data.access_token;
-      this.tokenExpiration = new Date(
+      req.session.token = response.data.access_token;
+      req.session.tokenExpiration = new Date(
         now.getTime() + response.data.expires_in * 1000
       );
 
-      return this.token;
+      return req.session.token;
     } catch (error) {
       console.error("Error fetching auth token:", error.response?.data);
       throw error;
@@ -43,9 +48,8 @@ const grabExpressService = {
   },
 
   // To get delivery quotes before customer place an order
-  getDeliveryQuotes: async (deliveryDetails) => {
+  getDeliveryQuotes: async (deliveryDetails, token) => {
     try {
-      const token = await this.getAuthToken();
       const response = await axios.post(
         `${grabExpressCredentials.baseURL}/v1/deliveries/quotes`,
         deliveryDetails,
@@ -66,9 +70,8 @@ const grabExpressService = {
   },
 
   // To request delivery service
-  createDeliveryRequest: async (deliveryDetails) => {
+  createDeliveryRequest: async (deliveryDetails, token) => {
     try {
-      const token = await this.getAuthToken();
       const response = await axios.post(
         `${grabExpressCredentials.baseURL}/v1/deliveries`,
         deliveryDetails,
@@ -90,9 +93,8 @@ const grabExpressService = {
     }
   },
 
-  getDeliveryDetails: async (deliveryID) => {
+  getDeliveryDetails: async (deliveryID, token) => {
     try {
-      const token = await this.getAuthToken();
       const response = await axios.get(
         `
         ${grabExpressCredentials.baseURL}/v1/deliveries/${deliveryID}
@@ -114,9 +116,8 @@ const grabExpressService = {
     }
   },
 
-  cancelDelivery: async (deliveryID) => {
+  cancelDelivery: async (deliveryID, token) => {
     try {
-      const token = await this.getAuthToken();
       const response = await axios.delete(
         `${grabExpressCredentials.baseURL}/v1/deliveries/${deliveryID}`,
         {
