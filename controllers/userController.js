@@ -28,13 +28,16 @@ const userController = {
   },
 
   getUserProfile: async (req, res) => {
-    const userId = req.user.id; // Assuming the user ID is stored in the token (JWT)
+    // console.log(req.user);
+    const email = req.user.email; // Assuming the email is stored in the token (JWT)
+    console.log(email);
 
     try {
+      const user = await userService.getUserProfile(email);
       res.json({ profile: user });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: error_message });
+      res.status(500).json({ message: error.message });
     }
   },
 };

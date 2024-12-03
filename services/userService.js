@@ -33,7 +33,7 @@ const userService = {
       if (!isMatch) throw new Error("Invalid credentials");
 
       // Generate JWT token
-      const token = jwt.sign({ id: user_id }, process.env.JWT_SECRET, {
+      const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
       return token;
@@ -43,11 +43,13 @@ const userService = {
     }
   },
 
-  getUserProfile: async (userID) => {
+  getUserProfile: async (email) => {
     try {
-      // Find user by ID
-      const user = await User.findByPk(userID);
+      // Find user by email then display details
+      const user = await User.findOne({ where: { email } });
       if (!user) throw new Error("User not found");
+
+      return user;
     } catch (error) {
       console.error(error);
       throw error;
