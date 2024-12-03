@@ -56,6 +56,7 @@ const grabExpressService = {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
@@ -93,6 +94,7 @@ const grabExpressService = {
     }
   },
 
+  // To get information about an in-progress delivery
   getDeliveryDetails: async (deliveryID, token) => {
     try {
       const response = await axios.get(
@@ -116,6 +118,7 @@ const grabExpressService = {
     }
   },
 
+  // To cancel a particular delivery order in particular conditions
   cancelDelivery: async (deliveryID, token) => {
     try {
       const response = await axios.delete(
