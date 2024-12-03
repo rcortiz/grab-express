@@ -37,7 +37,7 @@ const grabExpressController = {
       const token = await grabExpressService.getAuthToken(req);
       const response = await grabExpressService.getDeliveryDetails(
         deliveryID,
-        req
+        token
       );
       res.status(200).json(response);
     } catch (error) {
