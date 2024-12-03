@@ -1,13 +1,17 @@
 const express = require("express");
 const router = express.Router();
+const userRoutes = require("./userRoutes");
+const grabExpressRoutes = require("./grabExpressRoutes");
 
-/* GET home page. */
+// Home route
 router.get("/", (req, res, next) => {
   res.render("index", { title: "Express" });
 });
 
-router.post("/", (req, res) => {
-  res.send("Got a POST request");
-});
+// Prefix user routes with /user
+router.use("/user", userRoutes);
+
+// Prefix grab-express routes with /grab-express
+router.use("/grab-express", grabExpressRoutes);
 
 module.exports = router;
