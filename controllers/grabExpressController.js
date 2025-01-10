@@ -3,13 +3,14 @@ const grabExpressService = require("../services/grabExpressService");
 const grabExpressController = {
   getDeliveryQuotes: async (req, res) => {
     try {
-      const deliveryDetails = req.body;
-      const token = await grabExpressService.getAuthToken(req);
-      const response = await grabExpressService.getDeliveryQuotes(
-        deliveryDetails,
-        token
-      );
-      res.status(201).json(response);
+      // const deliveryDetails = req.body;
+      // const token = await grabExpressService.getAuthToken(req);
+      // const response = await grabExpressService.getDeliveryQuotes(
+      //   deliveryDetails,
+      //   token
+      // );
+      // res.status(201).json(response);
+      res.status(200).json({ message: "success" });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Error fetching delivery quotes" });
