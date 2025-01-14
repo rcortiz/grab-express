@@ -12,4 +12,10 @@ const grabExpressCredentials = {
   scope: "grab_Express.scope",
 };
 
-module.exports = grabExpressCredentials;
+const googleMapsCredentials = {
+  apiKey: process.env.GOOGLE_MAPS_API_KEY,
+};
+module.exports = {
+  grabExpress: grabExpressCredentials,
+  googleMaps: googleMapsCredentials,
+};

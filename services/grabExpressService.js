@@ -1,5 +1,5 @@
 const axios = require("axios");
-const grabExpressCredentials = require("../config/grabExpressCredentials");
+const grabExpressCredentials = require("../config/credentials");
 
 const grabExpressService = {
   token: null,
