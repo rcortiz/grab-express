@@ -1,4 +1,4 @@
-# Express-JS-1
+# Grab Express Middleware API
 
 A simple Express.js project to demonstrate basic API functionality with Express. This project serves as a foundation for building scalable backend services.
 
