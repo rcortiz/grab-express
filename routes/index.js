@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const userRoutes = require("./userRoutes");
-const grabExpressRoutes = require("./grabExpressRoutes");
-const mapRoutes = require("./mapRoutes");
+const userRoutes = require("./user-routes");
+const grabExpressRoutes = require("./grabexpress-routes");
+const googleMapRoutes = require("./gmap-routes");
 
 // Home route
 router.get("/", (req, res, next) => {
@@ -16,6 +16,6 @@ router.use("/user", userRoutes);
 router.use("/grab-express", grabExpressRoutes);
 
 // Prefix map routes with /map
-router.use("/map", mapRoutes);
+router.use("/map", googleMapRoutes);
 
 module.exports = router;

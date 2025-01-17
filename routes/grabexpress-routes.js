@@ -1,6 +1,7 @@
 const express = require("express");
+const grabExpressController = require("../controllers/grabexpress-controller");
+
 const router = express.Router();
-const grabExpressController = require("../controllers/grabExpressController");
 
 router.post("/delivery-quotes", grabExpressController.getDeliveryQuotes);
 router.post("/delivery-request", grabExpressController.createDeliveryRequest);

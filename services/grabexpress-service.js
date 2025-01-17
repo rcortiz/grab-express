@@ -1,19 +1,21 @@
 const axios = require("axios");
 const grabExpressCredentials = require("../config/credentials");
 
-const grabExpressService = {
-  token: null,
-  tokenExpiration: null,
+class GrabExpressService {
+  constructor() {
+    this.token = null;
+    this.tokenExpiresAt = null;
+  }
 
-  // Authentication purposes before using GrabExpress API
-  getAuthToken: async (req) => {
+  // Fetch authentication token
+  async getAuthToken(req) {
     const now = new Date();
 
-    // Check if token is stored in session and if it has expired
+    // Check if token exists in session and is still valid
     if (
       req.session.token &&
-      req.session.tokenExpiration &&
-      now < req.session.tokenExpiration
+      req.session.tokenExpiresAt &&
+      req.session.tokenExpiresAt > now
     ) {
       return req.session.token;
     }
@@ -36,7 +38,7 @@ const grabExpressService = {
       );
 
       req.session.token = response.data.access_token;
-      req.session.tokenExpiration = new Date(
+      req.session.tokenExpiresAt = new Date(
         now.getTime() + response.data.expires_in * 1000
       );
 
@@ -45,10 +47,10 @@ const grabExpressService = {
       console.error("Error fetching auth token:", error.response?.data);
       throw error;
     }
-  },
+  }
 
-  // To get delivery quotes before customer place an order
-  getDeliveryQuotes: async (deliveryDetails, token) => {
+  // Get delivery quotes
+  async getDeliveryQuotes(deliveryDetails, token) {
     try {
       const response = await axios.post(
         `${grabExpressCredentials.baseURL}/v1/deliveries/quotes`,
@@ -68,10 +70,10 @@ const grabExpressService = {
       );
       throw error;
     }
-  },
+  }
 
-  // To request delivery service
-  createDeliveryRequest: async (deliveryDetails, token) => {
+  // Create a delivery request
+  async createDeliveryRequest(deliveryDetails, token) {
     try {
       const response = await axios.post(
         `${grabExpressCredentials.baseURL}/v1/deliveries`,
@@ -83,7 +85,6 @@ const grabExpressService = {
           },
         }
       );
-
       return response.data;
     } catch (error) {
       console.error(
@@ -92,15 +93,13 @@ const grabExpressService = {
       );
       throw error;
     }
-  },
+  }
 
-  // To get information about an in-progress delivery
-  getDeliveryDetails: async (deliveryID, token) => {
+  // Get delivery details
+  async getDeliveryDetails(deliveryID, token) {
     try {
       const response = await axios.get(
-        `
-        ${grabExpressCredentials.baseURL}/v1/deliveries/${deliveryID}
-      `,
+        `${grabExpressCredentials.baseURL}/v1/deliveries/${deliveryID}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -116,10 +115,10 @@ const grabExpressService = {
       );
       throw error;
     }
-  },
+  }
 
-  // To cancel a particular delivery order in particular conditions
-  cancelDelivery: async (deliveryID, token) => {
+  // Cancel a delivery request
+  async cancelDelivery(deliveryID, token) {
     try {
       const response = await axios.delete(
         `${grabExpressCredentials.baseURL}/v1/deliveries/${deliveryID}`,
@@ -130,7 +129,6 @@ const grabExpressService = {
           },
         }
       );
-
       return response.data;
     } catch (error) {
       console.error(
@@ -139,50 +137,6 @@ const grabExpressService = {
       );
       throw error;
     }
-  },
-
-  // createOrder: async (orderDetails) => {
-  //   try {
-  //     const token = await this.getAuthToken();
-  //     const response = await axios.post(
-  //       `${grabExpressCredentials.baseURL}/orders`,
-  //       orderDetails,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error(
-  //       "Error creating order with Grab Express:",
-  //       error.response.data || error.message
-  //     );
-  //     throw error;
-  //   }
-  // },
-
-  // getOrderStatus: async (orderId) => {
-  //   try {
-  //     const token = await this.getAuthToken();
-  //     const response = await axios.get(
-  //       `${grabExpressCredentials.baseURL}/orders/${orderId}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     return response.data;
-  //   } catch (error) {
-  //     console.log(
-  //       "Error fetching order status from Grab Express:",
-  //       error.response.data || error.message
-  //     );
-  //     throw error;
-  //   }
-  // },
-};
-
-module.exports = grabExpressService;
+  }
+}
+module.exports = GrabExpressService;

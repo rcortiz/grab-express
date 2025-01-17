@@ -13,6 +13,7 @@ const grabExpressCredentials = {
 };
 
 const googleMapsCredentials = {
+  baseURL: process.env.GOOGLE_MAPS_API_BASE_URL,
   apiKey: process.env.GOOGLE_MAPS_API_KEY,
 };
 module.exports = {
