@@ -3,6 +3,7 @@ const grabExpressController = require("../controllers/grabexpress-controller");
 
 const router = express.Router();
 
+router.post("/auth/token", grabExpressController.getAuthToken);
 router.post("/delivery-quotes", grabExpressController.getDeliveryQuotes);
 router.post("/delivery-request", grabExpressController.createDeliveryRequest);
 router.get(
@@ -10,8 +11,6 @@ router.get(
   grabExpressController.getDeliveryDetails
 );
 router.delete("/delivery/:deliveryID", grabExpressController.cancelDelivery);
-
-// router.post("/orders", grabExpressController.createOrder);
-// router.get("/orders/:orderId", grabExpressController.getOrderStatus);
+router.post("/webhook", grabExpressController.trackDeliveryStatus);
 
 module.exports = router;

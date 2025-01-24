@@ -9,13 +9,14 @@ const grabExpressCredentials = {
   clientId: process.env.GRAB_EXPRESS_CLIENT_ID,
   clientSecret: process.env.GRAB_EXPRESS_CLIENT_SECRET,
   grantType: "client_credentials",
-  scope: "grab_Express.scope",
+  scope: "grab_express.partner_deliveries",
 };
 
 const googleMapsCredentials = {
   baseURL: process.env.GOOGLE_MAPS_API_BASE_URL,
   apiKey: process.env.GOOGLE_MAPS_API_KEY,
 };
+
 module.exports = {
   grabExpress: grabExpressCredentials,
   googleMaps: googleMapsCredentials,
