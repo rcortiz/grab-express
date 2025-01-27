@@ -9,31 +9,35 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.createTable("Users", {
+    await queryInterface.createTable("packages", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
+      quote_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "quotes", // References the Quotes table
+          key: "id",
+        },
+        onDelete: "CASCADE", // Delete packages when the associated quote is deleted
+      },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      email: {
+      description: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      password: {
-        type: Sequelize.STRING,
+      quantity: {
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
-      createdAt: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
-      },
-      updatedAt: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
+      price: {
+        type: Sequelize.FLOAT,
+        allowNull: false,
       },
     });
   },
@@ -45,6 +49,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.dropTable("Users");
+    await queryInterface.dropTable("packages");
   },
 };

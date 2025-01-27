@@ -1,6 +1,8 @@
 const axios = require("axios");
 const qs = require("querystring");
 const { grabExpress } = require("../config/credentials");
+const { saveDeliveryQuotes } = require("../helpers/grab-express");
+const { error } = require("console");
 
 class GrabExpressService {
   constructor() {
@@ -55,7 +57,6 @@ class GrabExpressService {
 
   // Get delivery quotes
   async getDeliveryQuotes(deliveryDetails, token) {
-    console.log(grabExpress.baseURL);
     try {
       const response = await axios.post(
         `${grabExpress.baseURL}/v1/deliveries/quotes`,
@@ -67,6 +68,11 @@ class GrabExpressService {
           },
         }
       );
+      saveDeliveryQuotes(response.data)
+        .then(() => {
+          console.log("API response saved successfully");
+        })
+        .catch(error);
       return response.data;
     } catch (error) {
       console.error(
