@@ -1,3 +1,5 @@
+const transformToGrabExpress = require("../helpers/transformDeliveryDetails");
+const transformDeliveryDetails = require("../helpers/transformDeliveryDetails");
 const GrabExpressService = require("../services/grabexpress-service");
 const grabExpressService = new GrabExpressService();
 
@@ -14,14 +16,40 @@ const grabExpressController = {
 
   getDeliveryQuotes: async (req, res) => {
     try {
-      const deliveryDetails = req.body;
+      const deliveryPayload = await transformDeliveryDetails(req.body);
+      console.log("delivery payload", deliveryPayload);
+      const deliveryDetails = JSON.parse(deliveryPayload);
+      // const deliveryDetails = req.body;
       const token = await grabExpressService.getAuthToken(req);
       const response = await grabExpressService.getDeliveryQuotes(
         deliveryDetails,
         token
       );
 
-      res.status(200).json({ message: "success", data: response });
+      // console.log("response", response);
+
+      const total_price = response.quotes.map((quote) => quote.amount);
+
+      const deliveryQuotes = {
+        rates: [
+          {
+            service_name: "Grab Express",
+            service_code: "GRAB_EXPRESS",
+            total_price: parseFloat(total_price[0]).toFixed(2).replace(".", ""),
+            currency: "PHP",
+            min_delivery_time: 30,
+            max_delivery_time: 60,
+          },
+        ],
+      };
+
+      console.log(JSON.stringify(deliveryQuotes));
+
+      // res
+      //   .status(200)
+      //   .json({ message: "success", data: JSON.stringify(deliveryQuotes) });
+
+      res.json(deliveryQuotes);
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Error fetching delivery quotes" });

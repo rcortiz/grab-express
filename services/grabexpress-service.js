@@ -1,8 +1,7 @@
 const axios = require("axios");
 const qs = require("querystring");
 const { grabExpress } = require("../config/credentials");
-const { saveDeliveryQuotes } = require("../helpers/grab-express");
-const { error } = require("console");
+const { saveDeliveryQuotes } = require("../helpers/grabExpress");
 
 class GrabExpressService {
   constructor() {
@@ -68,11 +67,11 @@ class GrabExpressService {
           },
         }
       );
-      saveDeliveryQuotes(response.data)
-        .then(() => {
-          console.log("API response saved successfully");
-        })
-        .catch(error);
+      // saveDeliveryQuotes(response.data)
+      //   .then(() => {
+      //     console.log("API response saved successfully");
+      //   })
+      //   .catch(error);
       return response.data;
     } catch (error) {
       console.error(
