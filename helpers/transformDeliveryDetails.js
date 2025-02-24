@@ -1,54 +1,36 @@
-const axios = require("axios");
+const getCoordinates = require("../helpers/getCoordinates");
+const { getProvinceName } = require("../helpers/fetchLocation");
 
-async function getCoordinates(address) {
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-    address
-  )}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
-
-  try {
-    const response = await axios.get(url);
-    if (response.data.results.length > 0) {
-      const location = response.data.results[0].geometry.location;
-      return { latitude: location.lat, longitude: location.lng };
-    }
-    return null;
-  } catch (error) {
-    console.error("Error fetching coordinates:", error);
-    return null;
-  }
-}
-
-async function transformToGrabExpress(response) {
+const transformToGrabExpress = async (response) => {
+  // console.log(JSON.stringify(response));
   const { origin, destination, items } = response.rate;
 
   const destinationCoordinates = await getCoordinates(destination.address1);
+  const province = getProvinceName(destination.province);
 
   if (!destinationCoordinates) {
     console.error("Error: Could not fetch destination coordinates.");
     return null;
   }
 
-  const grabExpressPayload = {
+  const payload = {
     serviceType: "INSTANT",
     vehicleType: "BIKE",
     codType: "REGULAR",
-    packages: [
-      {
-        name: "Orange Snowboard",
-        description: "No description",
-        quantity: 1,
-        price: 10000,
-        dimensions: {
-          height: 0,
-          width: 0,
-          depth: 0,
-          weight: 0,
-        },
+    packages: items.map((item) => ({
+      name: item.name,
+      description: item.description || "No Description",
+      quantity: item.quantity,
+      price: item.price,
+      dimension: {
+        height: item.height || 0,
+        width: item.width || 0,
+        depth: item.depth || 0,
+        weight: item.grams || 0,
       },
-    ],
+    })),
     origin: {
       address: `${origin.address1}, ${origin.city}, Metro Manila, Philippines`,
-      keywords: `${origin.city}, Metro Manila`,
       cityCode: "MNL",
       coordinates: {
         latitude: origin.latitude,
@@ -56,19 +38,18 @@ async function transformToGrabExpress(response) {
       },
     },
     destination: {
-      address: `${destination.address1}, ${destination.city}, Metro Manila, Philippines ${destination.postal_code}`,
-      keywords: `${destination.city}, Metro Manila`,
+      address: `${destination.address1}, ${destination.city}, ${province}, Philippines ${destination.postal_code}`,
       cityCode: "MNL",
       coordinates: {
         latitude: destinationCoordinates.latitude,
         longitude: destinationCoordinates.longitude,
-        // latitude: 14.4962781,
-        // longitude: 121.0357426,
       },
     },
   };
 
-  return JSON.stringify(grabExpressPayload);
-}
+  console.log(payload);
+
+  return JSON.stringify(payload);
+};
 
 module.exports = transformToGrabExpress;

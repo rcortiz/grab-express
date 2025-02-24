@@ -3,34 +3,24 @@ const googleMapService = new GoogleMapsService();
 
 const gmapController = {
   getMapData: async (req, res) => {
-    const { pickup, dropoff } = req.body;
+    const { latitude, longitude } = req.body;
 
-    if (!pickup || !dropoff) {
+    if (!latitude || !longitude) {
       return res
         .status(400)
-        .json({ error: "Pickup and dropoff locations are required" });
+        .json({ error: "Latitude and longitude are required" });
     }
 
     try {
-      // Fetch geocode data for both locations
-      const [pickupLocation, dropoffLocation] = await Promise.all([
-        googleMapService.getGeocode(pickup),
-        googleMapService.getGeocode(dropoff),
-      ]);
-
-      // Fetch directions data
-      const directions = await googleMapService.getDirections(
-        `${pickupLocation.lat},${pickupLocation.lng}`,
-        `${dropoffLocation.lat},${dropoffLocation.lng}`
+      // Fetch formatted address based on coordinates
+      const formattedAddress = await googleMapService.getFormattedAddress(
+        latitude,
+        longitude
       );
 
-      res.json({
-        pickupLocation,
-        dropoffLocation,
-        directions,
-      });
+      res.json({ formattedAddress });
     } catch (error) {
-      console.error("Error fetching map data:", error);
+      console.error("Error fetching formatted address:", error);
       res.status(500).json({ error: error.message });
     }
   },

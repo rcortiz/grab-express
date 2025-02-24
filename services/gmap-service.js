@@ -2,48 +2,24 @@ const axios = require("axios");
 const { googleMaps } = require("../config/credentials");
 
 class GoogleMapsService {
-  constructor() {}
-
-  // Get geocode for a given address
-  async getGeocode(address) {
+  // Get formatted address from latitude & longitude
+  async getFormattedAddress(lat, lng) {
     try {
       const response = await axios.get(`${googleMaps.baseURL}/geocode/json`, {
         params: {
-          address,
+          latlng: `${lat},${lng}`,
           key: googleMaps.apiKey,
         },
       });
 
-      if (response.data.results.length === 0) {
-        throw new Error("No results found for the given address");
+      if (response.data.status !== "OK" || response.data.results.length === 0) {
+        throw new Error("No address found for the given coordinates.");
       }
 
-      return response.data.results[0].geometry.location;
+      return response.data.results[0].formatted_address;
     } catch (error) {
-      console.error("Error fetching geocode:", error.message);
-      throw new Error("Failed to fetch geocode data");
-    }
-  }
-
-  // Get directions between two locations
-  async getDirections(origin, destination) {
-    try {
-      const response = await axios.get(
-        `${googleMaps.baseURL}/directions/json`,
-        {
-          params: {
-            origin,
-            destination,
-            mode: "driving",
-            key: googleMaps.apiKey,
-          },
-        }
-      );
-
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching directions:", error.message);
-      throw new Error("Failed to fetch directions data");
+      console.error("Error fetching formatted address:", error.message);
+      throw new Error("Failed to get address from Google Maps API.");
     }
   }
 }

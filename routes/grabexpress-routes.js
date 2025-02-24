@@ -5,6 +5,10 @@ const router = express.Router();
 
 router.post("/auth/token", grabExpressController.getAuthToken);
 router.post("/delivery-quotes", grabExpressController.getDeliveryQuotes);
+router.post(
+  "/fetch-delivery-quotes",
+  grabExpressController.fetchDeliveryQuotes
+);
 router.post("/delivery-request", grabExpressController.createDeliveryRequest);
 router.get(
   "/delivery-details/:deliveryID",

@@ -1,7 +1,10 @@
-const transformToGrabExpress = require("../helpers/transformDeliveryDetails");
+const moment = require("moment");
+
 const transformDeliveryDetails = require("../helpers/transformDeliveryDetails");
 const GrabExpressService = require("../services/grabexpress-service");
 const grabExpressService = new GrabExpressService();
+
+let deliveryFee = 0;
 
 const grabExpressController = {
   getAuthToken: async (req, res) => {
@@ -14,42 +17,82 @@ const grabExpressController = {
     }
   },
 
+  // getDeliveryQuotes: async (req, res) => {
+  //   try {
+  //     const deliveryPayload = await transformDeliveryDetails(req.body);
+  //     const deliveryDetails = JSON.parse(deliveryPayload);
+  //     // const deliveryDetails = req.body;
+  //     const token = await grabExpressService.getAuthToken(req);
+  //     const response = await grabExpressService.getDeliveryQuotes(
+  //       deliveryDetails,
+  //       token
+  //     );
+
+  //     const total_price = response.quotes.map((quote) => quote.amount);
+  //     const pickupTimeline = response.quotes.map(
+  //       (quote) => quote.estimatedTimeline.pickup
+  //     );
+  //     const dropoffTimeline = response.quotes.map(
+  //       (quote) => quote.estimatedTimeline.dropoff
+  //     );
+
+  //     const deliveryQuotes = {
+  //       rates: [
+  //         {
+  //           service_name: "Grab Express",
+  //           service_code: "GRAB_EXPRESS",
+  //           total_price: parseFloat(total_price[0]).toFixed(2).replace(".", ""),
+  //           description: `Estimated Timeline:
+  //             ${moment(pickupTimeline).format("MMMM D, YYYY h:mm A")} -
+  //            ${moment(dropoffTimeline).format("MMMM D, YYYY h:mm A")}`,
+  //           currency: "PHP",
+  //           min_delivery_time: 30,
+  //           max_delivery_time: 60,
+  //         },
+  //       ],
+  //     };
+
+  //     // res.status(200).json({ message: "success", data: response });
+  //     res.status(200).json(deliveryQuotes);
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).json({ message: "Error fetching delivery quotes" });
+  //   }
+  // },
+
   getDeliveryQuotes: async (req, res) => {
     try {
-      const deliveryPayload = await transformDeliveryDetails(req.body);
-      console.log("delivery payload", deliveryPayload);
-      const deliveryDetails = JSON.parse(deliveryPayload);
-      // const deliveryDetails = req.body;
+      const deliveryDetails = req.body;
       const token = await grabExpressService.getAuthToken(req);
       const response = await grabExpressService.getDeliveryQuotes(
         deliveryDetails,
         token
       );
 
-      // console.log("response", response);
+      deliveryFee = response.quotes[0].amount;
+      console.log(deliveryFee);
+      res.status(200).json(response);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error fetching delivery quotes" });
+    }
+  },
 
-      const total_price = response.quotes.map((quote) => quote.amount);
-
-      const deliveryQuotes = {
+  fetchDeliveryQuotes: async (req, res) => {
+    try {
+      res.status(200).json({
         rates: [
           {
             service_name: "Grab Express",
             service_code: "GRAB_EXPRESS",
-            total_price: parseFloat(total_price[0]).toFixed(2).replace(".", ""),
+            total_price: parseFloat(deliveryFee).toFixed(2).replace(".", ""),
+            description: "SAMPLE TEXT",
             currency: "PHP",
             min_delivery_time: 30,
             max_delivery_time: 60,
           },
         ],
-      };
-
-      console.log(JSON.stringify(deliveryQuotes));
-
-      // res
-      //   .status(200)
-      //   .json({ message: "success", data: JSON.stringify(deliveryQuotes) });
-
-      res.json(deliveryQuotes);
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Error fetching delivery quotes" });
