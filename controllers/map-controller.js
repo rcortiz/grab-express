@@ -1,4 +1,4 @@
-const GoogleMapsService = require("../services/gmap-service");
+const GoogleMapsService = require("../services/map-service");
 const googleMapService = new GoogleMapsService();
 
 const gmapController = {

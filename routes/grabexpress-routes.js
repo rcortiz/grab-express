@@ -1,20 +1,20 @@
 const express = require("express");
-const grabExpressController = require("../controllers/grabexpress-controller");
+const GrabExpressController = require("../controllers/grabexpress-controller");
 
 const router = express.Router();
 
-router.post("/auth/token", grabExpressController.getAuthToken);
-router.post("/delivery-quotes", grabExpressController.getDeliveryQuotes);
+router.post("/auth/token", GrabExpressController.getAuthToken);
+router.post("/delivery-quotes", GrabExpressController.getDeliveryQuotes);
 router.post(
   "/fetch-delivery-quotes",
-  grabExpressController.fetchDeliveryQuotes
+  GrabExpressController.fetchDeliveryQuotes
 );
-router.post("/delivery-request", grabExpressController.createDeliveryRequest);
+router.post("/delivery-request", GrabExpressController.createDeliveryRequest);
 router.get(
   "/delivery-details/:deliveryID",
-  grabExpressController.getDeliveryDetails
+  GrabExpressController.getDeliveryDetails
 );
-router.delete("/delivery/:deliveryID", grabExpressController.cancelDelivery);
-router.post("/webhook", grabExpressController.trackDeliveryStatus);
+router.delete("/delivery/:deliveryID", GrabExpressController.cancelDelivery);
+router.post("/webhook", GrabExpressController.trackDeliveryStatus);
 
 module.exports = router;

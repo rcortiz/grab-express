@@ -159,4 +159,23 @@ const grabExpressController = {
   },
 };
 
+//  async trackDeliveryStatus(req, res) {
+//     try {
+//       const webhookData = req.body; // Webhook payload from Grab Express
+//       await this.grabExpressService.trackDeliveryStatus(webhookData);
+
+//       res.status(200).json({
+//         success: true,
+//         message: "Delivery status processed successfully.",
+//       });
+//     } catch (error) {
+//       console.error("Error in trackDeliveryStatus:", error.message);
+//       res.status(500).json({
+//         success: false,
+//         message: "Failed to process delivery status.",
+//         error: error.message,
+//       });
+//     }
+//   }
+
 module.exports = grabExpressController;
