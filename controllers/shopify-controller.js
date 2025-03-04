@@ -1,17 +1,19 @@
-const ShopifyService = require("../services/shopify-service");
-
-const GrabExpressService = require("../services/grabexpress-service");
+import ShopifyService from "../services/shopify-service.js";
+import GrabService from "../services/grab-service.js";
 
 class ShopifyController {
-  constructor() {}
+  constructor() {
+    this.shopifyService = new ShopifyService();
+    this.grabService = new GrabService();
+  }
 
-  async handleOrderCreate(req, res) {
+  handleOrderCreate = async (req, res) => {
     try {
       const webhookData = req.body;
       const orderId = webhookData.id;
 
       // Fetch order details
-      const orderDetails = await ShopifyService.getOrderDetails(orderId);
+      const orderDetails = await this.shopifyService.getOrderDetails(orderId);
 
       // Format delivery details for Grab Express delivery request
       const deliveryDetails = {
@@ -24,14 +26,14 @@ class ShopifyController {
       };
 
       // Create delivery request with Grab Express
-      const deliveryRequest = await GrabExpressService.createDeliveryRequest(
+      const deliveryRequest = await this.grabService.createDeliveryRequest(
         deliveryDetails
       );
 
       // Get the delivery ID from Grab Express response
       const deliveryId = deliveryRequest.deliveryID;
 
-      await ShopifyService.handleOrderCreation(webhookData, deliveryId);
+      await this.shopifyService.handleOrderCreation(webhookData, deliveryId);
 
       res.status(200).json({
         success: true,
@@ -46,7 +48,7 @@ class ShopifyController {
         error: error.message,
       });
     }
-  }
+  };
 }
 
-module.exports = new ShopifyController();
+export default ShopifyController;

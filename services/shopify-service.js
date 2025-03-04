@@ -1,8 +1,6 @@
-const axios = require("axios");
+import axios from "axios";
 
 class ShopifyService {
-  constructor() {}
-
   //  Fetch order details by order ID
   async getOrderDetails(orderId) {
     try {
@@ -66,4 +64,4 @@ class ShopifyService {
   }
 }
 
-module.exports = new ShopifyService();
+export default ShopifyService;

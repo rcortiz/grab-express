@@ -1,9 +1,9 @@
-const UserService = require("../services/user-service");
+import UserService from "../services/user-service.js";
 
 const userService = new UserService();
 
-const userController = {
-  registerUser: async (req, res) => {
+class UserController {
+  registerUser = async (req, res) => {
     const { name, email, password } = req.body;
 
     try {
@@ -15,9 +15,9 @@ const userController = {
       console.error("Error in registration:", error);
       res.status(500).json({ message: error.message });
     }
-  },
+  };
 
-  loginUser: async (req, res) => {
+  loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     try {
@@ -27,9 +27,9 @@ const userController = {
       console.error("Error in login:", error);
       res.status(500).json({ message: error.message });
     }
-  },
+  };
 
-  getUserProfile: async (req, res) => {
+  getUserProfile = async (req, res) => {
     const email = req.user.email;
 
     try {
@@ -39,7 +39,7 @@ const userController = {
       console.error("Error fetching user profile:", error);
       res.status(500).json({ message: error.message });
     }
-  },
-};
+  };
+}
 
-module.exports = userController;
+export default UserController;

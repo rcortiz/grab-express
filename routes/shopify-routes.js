@@ -1,12 +1,11 @@
-const express = require("express");
-const ShopifyController = require("../controllers/shopify-controller");
+import express from "express";
+import ShopifyController from "../controllers/shopify-controller.js";
 
-const router = express.Router();
+export const shopifyRoutes = express.Router();
+const shopifyController = new ShopifyController();
 
 // Webhook endpoint for order creation
-router.post("order-creation", ShopifyController.handleOrderCreation);
+shopifyRoutes.post("order-creation", shopifyController.handleOrderCreate);
 
 // Webhook endpoint for Grab Express delivery status updates
-router.post("delivery-status", ShopifyController.trackDeliveryStatus);
-
-module.exports = router;
+// shopifyRoutes.post("delivery-status", shopifyController.trackDeliveryStatus);

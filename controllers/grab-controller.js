@@ -1,29 +1,30 @@
-const moment = require("moment");
-
-const transformDeliveryDetails = require("../helpers/transformDeliveryDetails");
-const GrabExpressService = require("../services/grabexpress-service");
-const grabExpressService = new GrabExpressService();
+import moment from "moment";
+import GrabService from "../services/grab-service.js";
 
 let deliveryFee = 0;
 
-const grabExpressController = {
-  getAuthToken: async (req, res) => {
+class GrabController {
+  constructor() {
+    this.grabService = new GrabService();
+  }
+
+  getAuthToken = async (req, res) => {
     try {
-      const token = await grabExpressService.getAuthToken(req);
+      const token = await this.grabService.getAuthToken(req);
       res.status(200).json({ token });
     } catch (error) {
       console.error("Error fetching auth token:", error);
       res.status(500).json({ message: "Error fetching auth token" });
     }
-  },
+  };
 
   // getDeliveryQuotes: async (req, res) => {
   //   try {
   //     const deliveryPayload = await transformDeliveryDetails(req.body);
-  //     const deliveryDetails = JSON.parse(deliveryPayload);
+  //     const deliveryD~~etails = JSON.parse(deliveryPayload);
   //     // const deliveryDetails = req.body;
-  //     const token = await grabExpressService.getAuthToken(req);
-  //     const response = await grabExpressService.getDeliveryQuotes(
+  //     const token = await this.grabService.getAuthToken(req);
+  //     const response = await this.grabService.getDeliveryQuotes(
   //       deliveryDetails,
   //       token
   //     );
@@ -60,14 +61,16 @@ const grabExpressController = {
   //   }
   // },
 
-  getDeliveryQuotes: async (req, res) => {
+  getDeliveryQuotes = async (req, res) => {
     try {
       const deliveryDetails = req.body;
-      const token = await grabExpressService.getAuthToken(req);
-      const response = await grabExpressService.getDeliveryQuotes(
+      const token = await this.grabService.getAuthToken(req);
+      const response = await this.grabService.getDeliveryQuotes(
         deliveryDetails,
         token
       );
+
+      console.log(response);
 
       deliveryFee = response.quotes[0].amount;
       console.log(deliveryFee);
@@ -76,9 +79,9 @@ const grabExpressController = {
       console.error(error);
       res.status(500).json({ message: "Error fetching delivery quotes" });
     }
-  },
+  };
 
-  fetchDeliveryQuotes: async (req, res) => {
+  fetchDeliveryQuotes = async (req, res) => {
     try {
       res.status(200).json({
         rates: [
@@ -97,13 +100,13 @@ const grabExpressController = {
       console.error(error);
       res.status(500).json({ message: "Error fetching delivery quotes" });
     }
-  },
+  };
 
-  createDeliveryRequest: async (req, res) => {
+  createDeliveryRequest = async (req, res) => {
     try {
       const deliveryDetails = req.body;
-      const token = await grabExpressService.getAuthToken(req);
-      const response = await grabExpressService.createDeliveryRequest(
+      const token = await grabService.getAuthToken(req);
+      const response = await grabService.createDeliveryRequest(
         deliveryDetails,
         token
       );
@@ -113,69 +116,47 @@ const grabExpressController = {
       console.error(error);
       res.status(500).json({ message: "Error creating delivery request" });
     }
-  },
+  };
 
-  getDeliveryDetails: async (req, res) => {
+  getDeliveryDetails = async (req, res) => {
     try {
       const { deliveryID } = req.params;
-      const token = await grabExpressService.getAuthToken(req);
-      const response = await grabExpressService.getDeliveryDetails(
-        deliveryID,
-        token
-      );
+      const token = await grabService.getAuthToken(req);
+      const response = await grabService.getDeliveryDetails(deliveryID, token);
       res.status(200).json({ message: "success", data: response });
     } catch (error) {
       console.error("Error fetching delivery details:", error);
       res.status(500).json({ message: "Error fetching delivery details" });
     }
-  },
+  };
 
-  cancelDelivery: async (req, res) => {
+  cancelDelivery = async (req, res) => {
     try {
       const { deliveryID } = req.params;
-      const token = await grabExpressService.getAuthToken(req);
+      const token = await grabService.getAuthToken(req);
 
-      await grabExpressService.cancelDelivery(deliveryID, token);
+      await grabService.cancelDelivery(deliveryID, token);
 
       res.status(200).json({ message: "success" });
     } catch (error) {
       console.error("Error cancelling delivery:", error);
       res.status(500).json({ message: "Error cancelling delivery details" });
     }
-  },
+  };
 
-  trackDeliveryStatus: async (req, res) => {
+  trackDeliveryStatus = async (req, res) => {
     try {
       const webhookData = req.body;
       console.log("Received Webhook:", webhookData);
 
-      await grabExpressService.trackDeliveryStatus(webhookData);
+      await grabService.trackDeliveryStatus(webhookData);
 
       res.status(200).json({ message: "Webhook received successfully" });
     } catch (error) {
       console.error("Error processing webhook:", error.message);
       res.status(500).json({ message: "Error processing webhook" });
     }
-  },
-};
+  };
+}
 
-//  async trackDeliveryStatus(req, res) {
-//     try {
-//       const webhookData = req.body; // Webhook payload from Grab Express
-//       await this.grabExpressService.trackDeliveryStatus(webhookData);
-
-//       res.status(200).json({
-//         success: true,
-//         message: "Delivery status processed successfully.",
-//       });
-//     } catch (error) {
-//       console.error("Error in trackDeliveryStatus:", error.message);
-//       res.status(500).json({
-//         success: false,
-//         message: "Failed to process delivery status.",
-//         error: error.message,
-//       });
-//     }
-//   }
-
-module.exports = grabExpressController;
+export default GrabController;

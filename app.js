@@ -1,16 +1,19 @@
-const createError = require("http-errors");
-const express = require("express");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const logger = require("morgan");
-const dotenv = require("dotenv");
-const helmetConfig = require("./config/helmet");
-const corsConfig = require("./config/cors");
-const sessionConfig = require("./config/session");
-
-const indexRouter = require("./routes/index");
+import path from "path";
+import { fileURLToPath } from "url";
+import cookieParser from "cookie-parser";
+import logger from "morgan";
+import dotenv from "dotenv";
+import createHttpError from "http-errors";
+import express from "express";
+import helmetMiddleware from "./config/helmet.js";
+import sessionMiddleware from "./config/session.js";
+import corsMiddleware from "./config/cors.js";
+import { routes } from "./routes/index.js";
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -23,26 +26,24 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(helmetConfig());
-app.use(corsConfig);
-app.use(sessionConfig());
+app.use(helmetMiddleware);
+app.use(sessionMiddleware);
+app.use(corsMiddleware);
 
-app.use("/", indexRouter);
+app.use("/", routes);
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
+app.use((req, res, next) => {
+  next(createHttpError(404));
 });
 
 // error handler
-app.use(function (error, req, res, next) {
-  // set locals, only providing error in development
+app.use((error, req, res, next) => {
   res.locals.message = error.message;
   res.locals.error = req.app.get("env") === "development" ? error : {};
 
-  // render the error page
   res.status(error.status || 500);
   res.render("error");
 });
 
-module.exports = app;
+export default app;

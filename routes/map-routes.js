@@ -1,8 +1,7 @@
-const express = require("express");
-const GoogleMapController = require("../controllers/map-controller");
+import express from "express";
+import MapController from "../controllers/map-controller.js";
 
-const router = express.Router();
+export const mapRoutes = express.Router();
+const mapController = new MapController();
 
-router.post("/get-map-data", GoogleMapController.getMapData);
-
-module.exports = router;
+mapRoutes.post("/get-map-data", mapController.getMapData);

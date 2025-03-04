@@ -1,14 +1,10 @@
-const axios = require("axios");
-const qs = require("querystring");
-const { grabExpress } = require("../config/credentials");
-const { saveDeliveryQuotes } = require("../helpers/grabExpress");
+import axios from "axios";
+import qs from "querystring";
+import { grabExpress } from "../config/credentials.js";
 
-class GrabExpressService {
-  constructor() {
-    this.token = null;
-    this.tokenExpiresAt = null;
-  }
-
+class GrabService {
+  static token = null;
+  static tokenExpiresAt = null;
   // Fetch authentication token
   async getAuthToken(req) {
     const now = new Date();
@@ -67,11 +63,6 @@ class GrabExpressService {
           },
         }
       );
-      // saveDeliveryQuotes(response.data)
-      //   .then(() => {
-      //     console.log("API response saved successfully");
-      //   })
-      //   .catch(error);
       return response.data;
     } catch (error) {
       console.error(
@@ -219,4 +210,5 @@ class GrabExpressService {
     }
   }
 }
-module.exports = GrabExpressService;
+
+export default GrabService;

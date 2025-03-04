@@ -1,24 +1,26 @@
-const express = require("express");
-const router = express.Router();
-const userRoutes = require("./user-routes");
-const grabExpressRoutes = require("./grabexpress-routes");
-const googleMapRoutes = require("./map-routes");
+// const userRoutes = require("./user-routes");
+// const googleMapRoutes = require("./map-routes");
+import { Router } from "express";
+import { grabRoutes } from "./grab-routes.js";
+import { mapRoutes } from "./map-routes.js";
+import { userRoutes } from "./user-routes.js";
+import { shopifyRoutes } from "./shopify-routes.js";
+
+export const routes = Router();
 
 // Home route
-router.get("/", (req, res, next) => {
+routes.get("/", (req, res, next) => {
   res.render("index", { title: "Express" });
 });
 
 // Prefix user routes with /user
-router.use("/user", userRoutes);
+routes.use("/user", userRoutes);
 
 // Prefix grab-express routes with /grab-express
-router.use("/grab-express", grabExpressRoutes);
+routes.use("/grab-express", grabRoutes);
 
 // Prefix map routes with /map
-router.use("/map", googleMapRoutes);
+routes.use("/map", mapRoutes);
 
 // Prefix shopify webhooks routes with /shopify
-router.use("/webhooks", googleMapRoutes);
-
-module.exports = router;
+routes.use("/webhooks", shopifyRoutes);

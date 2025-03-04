@@ -1,7 +1,7 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const User = require("../models/user-model");
-const BaseService = require("./base-service");
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import User from "../models/user-model.js";
+import BaseService from "./base-service.js";
 
 class UserService extends BaseService {
   constructor() {
@@ -63,4 +63,4 @@ class UserService extends BaseService {
   }
 }
 
-module.exports = UserService;
+export default UserService;

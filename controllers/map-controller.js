@@ -1,8 +1,11 @@
-const GoogleMapsService = require("../services/map-service");
-const googleMapService = new GoogleMapsService();
+import MapService from "../services/map-service.js";
 
-const gmapController = {
-  getMapData: async (req, res) => {
+class MapController {
+  constructor() {
+    this.mapService = new MapService();
+  }
+
+  getMapData = async (req, res) => {
     const { latitude, longitude } = req.body;
 
     if (!latitude || !longitude) {
@@ -13,7 +16,7 @@ const gmapController = {
 
     try {
       // Fetch formatted address based on coordinates
-      const formattedAddress = await googleMapService.getFormattedAddress(
+      const formattedAddress = await this.mapService.getFormattedAddress(
         latitude,
         longitude
       );
@@ -23,7 +26,7 @@ const gmapController = {
       console.error("Error fetching formatted address:", error);
       res.status(500).json({ error: error.message });
     }
-  },
-};
+  };
+}
 
-module.exports = gmapController;
+export default MapController;

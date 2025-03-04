@@ -1,7 +1,7 @@
-const axios = require("axios");
-const { googleMaps } = require("../config/credentials");
+import axios from "axios";
+import { googleMaps } from "../config/credentials.js";
 
-class GoogleMapsService {
+class MapService {
   // Get formatted address from latitude & longitude
   async getFormattedAddress(lat, lng) {
     try {
@@ -24,4 +24,4 @@ class GoogleMapsService {
   }
 }
 
-module.exports = GoogleMapsService;
+export default MapService;

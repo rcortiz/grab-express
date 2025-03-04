@@ -1,6 +1,6 @@
-const cors = require("cors");
+import cors from "cors";
 
-const corsOptions = {
+const corsMiddleware = {
   origin: [
     "http://localhost:3000",
     "http://localhost:4000",
@@ -8,12 +8,8 @@ const corsOptions = {
     "https://rcortiz-dev.myshopify.com",
     "https://rcortiz-dev.myshopify.com/*",
   ],
-  origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-console.log("CORS Configuration Applied");
-
-module.exports = cors(corsOptions);
+export default cors(corsMiddleware);
