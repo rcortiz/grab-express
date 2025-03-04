@@ -1,10 +1,9 @@
 import express from "express";
-import UserController from "../controllers/user-controller.js";
+import { UserController } from "../controllers/user-controller.js";
 import { protect } from "../middleware/authMiddleware.js";
 
 export const userRoutes = express.Router();
-const userController = new UserController();
 
-userRoutes.post("/register", userController.registerUser);
-userRoutes.post("/login", userController.loginUser);
-userRoutes.get("/profile", protect, userController.getUserProfile);
+userRoutes.post("/register", UserController.registerUser);
+userRoutes.post("/login", UserController.loginUser);
+userRoutes.get("/profile", protect, UserController.getUserProfile);

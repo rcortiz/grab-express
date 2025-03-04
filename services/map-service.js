@@ -1,16 +1,19 @@
 import axios from "axios";
-import { googleMaps } from "../config/credentials.js";
+import { GOOGLE_MAPS_CONFIG } from "../config/credentials.js";
 
-class MapService {
+export class MapService {
   // Get formatted address from latitude & longitude
-  async getFormattedAddress(lat, lng) {
+  static async getFormattedAddress(lat, lng) {
     try {
-      const response = await axios.get(`${googleMaps.baseURL}/geocode/json`, {
-        params: {
-          latlng: `${lat},${lng}`,
-          key: googleMaps.apiKey,
-        },
-      });
+      const response = await axios.get(
+        `${GOOGLE_MAPS_CONFIG.BASE_URL}/geocode/json`,
+        {
+          params: {
+            latlng: `${lat},${lng}`,
+            key: GOOGLE_MAPS_CONFIG.API_KEY,
+          },
+        }
+      );
 
       if (response.data.status !== "OK" || response.data.results.length === 0) {
         throw new Error("No address found for the given coordinates.");
@@ -23,5 +26,3 @@ class MapService {
     }
   }
 }
-
-export default MapService;

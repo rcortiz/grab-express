@@ -1,6 +1,6 @@
 import helmet from "helmet";
 
-const helmetMiddleware = helmet({
+export const helmetMiddleware = helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
@@ -12,5 +12,3 @@ const helmetMiddleware = helmet({
   hsts: { maxAge: 31536000, includeSubDomains: true },
   xssFilter: true,
 });
-
-export default helmetMiddleware;

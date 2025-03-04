@@ -5,10 +5,12 @@ import logger from "morgan";
 import dotenv from "dotenv";
 import createHttpError from "http-errors";
 import express from "express";
-import helmetMiddleware from "./config/helmet.js";
-import sessionMiddleware from "./config/session.js";
-import corsMiddleware from "./config/cors.js";
+import { helmetMiddleware } from "./config/helmet.js";
+import { sessionMiddleware } from "./config/session.js";
+// import { corsMiddleware } from "./config/cors.js";
 import { routes } from "./routes/index.js";
+
+import cors from "cors";
 
 dotenv.config();
 
@@ -28,7 +30,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(helmetMiddleware);
 app.use(sessionMiddleware);
-app.use(corsMiddleware);
+app.use(cors());
 
 app.use("/", routes);
 

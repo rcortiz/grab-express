@@ -1,6 +1,6 @@
 import axios from "axios";
 
-class ShopifyService {
+export class ShopifyService {
   //  Fetch order details by order ID
   async getOrderDetails(orderId) {
     try {
@@ -63,5 +63,3 @@ class ShopifyService {
     }
   }
 }
-
-export default ShopifyService;

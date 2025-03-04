@@ -1,6 +1,4 @@
-require('dotenv').config();  // Load environment variables from .env file
-
-module.exports = {
+export const config = {
   development: {
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -24,5 +22,5 @@ module.exports = {
     host: process.env.DB_HOST,
     dialect: "mysql",
     port: process.env.DB_PORT,
-  }
+  },
 };

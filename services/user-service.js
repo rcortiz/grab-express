@@ -1,14 +1,14 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import User from "../models/user-model.js";
-import BaseService from "./base-service.js";
+import { User } from "../models/user-model.js";
+import { BaseService } from "./base-service.js";
 
-class UserService extends BaseService {
+export class UserService extends BaseService {
   constructor() {
     super(User);
   }
 
-  async registerUser(name, email, password) {
+  static async registerUser(name, email, password) {
     try {
       const existingUser = await this.findByField("email", email);
 
@@ -29,7 +29,7 @@ class UserService extends BaseService {
     }
   }
 
-  async loginUser(email, password) {
+  static async loginUser(email, password) {
     try {
       const user = await this.findByField("email", email);
       if (!user) {
@@ -51,7 +51,7 @@ class UserService extends BaseService {
     }
   }
 
-  async getUserProfile(email) {
+  static async getUserProfile(email) {
     try {
       const user = await this.findByField("email", email);
       if (!user) throw new Error("User not found");
@@ -62,5 +62,3 @@ class UserService extends BaseService {
     }
   }
 }
-
-export default UserService;

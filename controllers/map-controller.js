@@ -1,11 +1,7 @@
-import MapService from "../services/map-service.js";
+import { MapService } from "../services/map-service.js";
 
-class MapController {
-  constructor() {
-    this.mapService = new MapService();
-  }
-
-  getMapData = async (req, res) => {
+export class MapController {
+  static async getMapData(req, res) {
     const { latitude, longitude } = req.body;
 
     if (!latitude || !longitude) {
@@ -15,8 +11,8 @@ class MapController {
     }
 
     try {
-      // Fetch formatted address based on coordinates
-      const formattedAddress = await this.mapService.getFormattedAddress(
+      // Fetch formatted address based on the given coordinates
+      const formattedAddress = await MapService.getFormattedAddress(
         latitude,
         longitude
       );
@@ -26,7 +22,5 @@ class MapController {
       console.error("Error fetching formatted address:", error);
       res.status(500).json({ error: error.message });
     }
-  };
+  }
 }
-
-export default MapController;

@@ -1,12 +1,12 @@
 import axios from "axios";
 import qs from "querystring";
-import { grabExpress } from "../config/credentials.js";
+import { GRAB_EXPRESS_CONFIG } from "../config/credentials.js";
 
-class GrabService {
+export class GrabService {
   static token = null;
   static tokenExpiresAt = null;
   // Fetch authentication token
-  async getAuthToken(req) {
+  static async getAuthToken(req) {
     const now = new Date();
 
     // Check if token exists in session and is still valid
@@ -22,10 +22,10 @@ class GrabService {
       const response = await axios.post(
         "https://partner-api.grab.com/grabid/v1/oauth2/token",
         qs.stringify({
-          client_id: grabExpress.clientId,
-          client_secret: grabExpress.clientSecret,
-          grant_type: grabExpress.grantType,
-          scope: grabExpress.scope,
+          client_id: GRAB_EXPRESS_CONFIG.CLIENT_ID,
+          client_secret: GRAB_EXPRESS_CONFIG.CLIENT_SECRET,
+          grant_type: GRAB_EXPRESS_CONFIG.GRANT_TYPE,
+          scope: GRAB_EXPRESS_CONFIG.SCOPE,
         }),
         {
           headers: {
@@ -51,10 +51,10 @@ class GrabService {
   }
 
   // Get delivery quotes
-  async getDeliveryQuotes(deliveryDetails, token) {
+  static async getDeliveryQuotes(deliveryDetails, token) {
     try {
       const response = await axios.post(
-        `${grabExpress.baseURL}/v1/deliveries/quotes`,
+        `${GRAB_EXPRESS_CONFIG.BASE_URL}/v1/deliveries/quotes`,
         deliveryDetails,
         {
           headers: {
@@ -74,10 +74,10 @@ class GrabService {
   }
 
   // Create a delivery request
-  async createDeliveryRequest(deliveryDetails, token) {
+  static async createDeliveryRequest(deliveryDetails, token) {
     try {
       const response = await axios.post(
-        `${grabExpress.baseURL}/v1/deliveries`,
+        `${GRAB_EXPRESS_CONFIG.BASE_URL}/v1/deliveries`,
         deliveryDetails,
         {
           headers: {
@@ -97,11 +97,11 @@ class GrabService {
   }
 
   // Get delivery details
-  async getDeliveryDetails(deliveryID, token) {
-    console.log(grabExpress.baseURL);
+  static async getDeliveryDetails(deliveryID, token) {
+    console.log(GRAB_EXPRESS_CONFIG.BASE_URL);
     try {
       const response = await axios.get(
-        `${grabExpress.baseURL}/v1/deliveries/${deliveryID}`,
+        `${GRAB_EXPRESS_CONFIG.BASE_URL}/v1/deliveries/${deliveryID}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -120,10 +120,10 @@ class GrabService {
   }
 
   // Cancel a delivery request
-  async cancelDelivery(deliveryID, token) {
+  static async cancelDelivery(deliveryID, token) {
     try {
       const response = await axios.delete(
-        `${grabExpress.baseURL}/v1/deliveries/${deliveryID}`,
+        `${GRAB_EXPRESS_CONFIG.BASE_URL}/v1/deliveries/${deliveryID}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -143,7 +143,7 @@ class GrabService {
   }
 
   // Track delivery status of the package
-  async trackDeliveryStatus(webhookData) {
+  static async trackDeliveryStatus(webhookData) {
     try {
       const { deliveryID, status } = webhookData;
       console.log(`Processing webhook for Tracking ID: ${deliveryID}`);
@@ -210,5 +210,3 @@ class GrabService {
     }
   }
 }
-
-export default GrabService;

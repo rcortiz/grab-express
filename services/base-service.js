@@ -1,4 +1,4 @@
-class BaseService {
+export class BaseService {
   constructor(model) {
     this.model = model;
   }
@@ -37,5 +37,3 @@ class BaseService {
     return await instance.destroy();
   }
 }
-
-export default BaseService;

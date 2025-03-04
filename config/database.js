@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config(); // Load environment variables
 
-const sequelize = new Sequelize(
+export const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
   process.env.DB_PASSWORD,
@@ -13,12 +13,3 @@ const sequelize = new Sequelize(
     port: process.env.DB_PORT,
   }
 );
-
-try {
-  await sequelize.authenticate();
-  console.log("Connection has been established successfully.");
-} catch (error) {
-  console.error("Unable to connect to the database:", error);
-}
-
-export default sequelize;
