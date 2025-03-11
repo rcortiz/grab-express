@@ -3,8 +3,6 @@ import qs from "querystring";
 import { GRAB_EXPRESS_CONFIG } from "../config/credentials.js";
 
 export class GrabService {
-  static token = null;
-  static tokenExpiresAt = null;
   // Fetch authentication token
   static async getAuthToken(req) {
     const now = new Date();
@@ -34,6 +32,8 @@ export class GrabService {
           },
         }
       );
+
+      console.log(response);
 
       req.session.token = response.data.access_token;
       req.session.tokenExpiresAt = new Date(

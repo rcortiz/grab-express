@@ -1,19 +1,22 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../../config/database");
+import { DataTypes, Model } from "sequelize";
+import { sequelize } from "../../config/database.js";
 
-const Package = sequelize.define(
-  "Package",
+import { Quote } from "./quote-model.js";
+
+export class Package extends Model {}
+
+Package.init(
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    quote_id: {
+    quoteId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Quote",
+        model: Quote,
         key: "id",
       },
       onDelete: "CASCADE",
@@ -36,9 +39,8 @@ const Package = sequelize.define(
     },
   },
   {
-    timestamps: false,
+    sequelize,
+    modelName: "Package",
     underscored: true,
   }
 );
-
-module.exports = Package;

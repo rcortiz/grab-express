@@ -1,8 +1,9 @@
 // import moment from "moment";
 
 import { GrabService } from "../services/grab-service.js";
+import { DeliveriesService } from "../services/deliveries-service.js";
 
-let deliveryFee = 0;
+// let deliveryFee = 0;
 
 export class GrabController {
   static async getAuthToken(req, res) {
@@ -66,11 +67,13 @@ export class GrabController {
         deliveryDetails,
         token
       );
+      const data = await DeliveriesService.saveDeliveryQuotes(response);
+      console.log("save data", data);
 
       // deliveryFee = response.quotes[0].amount;
-      req.session.deliveryFee = response.quotes[0].amount;
-      console.log(deliveryFee);
-      res.status(200).json(response);
+      // req.session.deliveryFee = response.quotes[0].amount;
+      // console.log(deliveryFee);
+      res.status(200).json({ message: "ok", data: data.amount });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Error fetching delivery quotes" });
@@ -78,8 +81,11 @@ export class GrabController {
   }
 
   static async fetchDeliveryQuotes(req, res) {
+    const { customerId } = req.body;
+    console.log(customerId);
     try {
-      const deliveryFee = req.session.deliveryFee || 0;
+      const deliveryFee = await DeliveriesService.fetchDeliveyQuotesById(1);
+      console.log(deliveryFee);
       res.status(200).json({
         rates: [
           {
@@ -105,7 +111,7 @@ export class GrabController {
           {
             service_name: "Grab Express Delivery",
             service_code: "GRAB_EXPRESS_2",
-            total_price: parseFloat(800).toFixed(2).replace(".", ""),
+            total_price: parseFloat(deliveryFee).toFixed(2).replace(".", ""),
             description: "Sample Description",
             currency: "PHP",
             min_delivery_time: 30,

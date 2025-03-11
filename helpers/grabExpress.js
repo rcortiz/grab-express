@@ -1,4 +1,4 @@
-const { Quote, Package } = require("../models/grab-express");
+const { Quotes, Package } = require("../models/grab-express");
 
 async function saveDeliveryQuotes(data) {
   const { quotes, origin, destination, packages } = data;
@@ -6,7 +6,7 @@ async function saveDeliveryQuotes(data) {
   // Iterate over each quote
   for (const quote of quotes) {
     // Create the quote and save all data including origin and destination
-    const quoteData = await Quote.create({
+    const quoteData = await Quotes.create({
       service_type: quote.service.type,
       service_name: quote.service.name,
       currency_code: quote.currency.code,

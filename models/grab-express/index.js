@@ -1,5 +1,5 @@
-const Quote = require("./quote-model");
-const Package = require("./package-model");
+import { Quote } from "./quote-model.js";
+import { Package } from "./package-model.js";
 
 Quote.hasMany(Package, {
   foreignKey: "quoteId",
@@ -10,7 +10,4 @@ Package.belongsTo(Quote, {
   as: "quote",
 });
 
-module.exports = {
-  Quote,
-  Package,
-};
+export { Quote, Package };

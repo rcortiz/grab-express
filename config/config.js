@@ -1,11 +1,19 @@
-export const config = {
+export default {
+  // development: {
+  //   username: process.env.DB_USER,
+  //   password: process.env.DB_PASSWORD,
+  //   database: process.env.DB_NAME,
+  //   host: process.env.DB_HOST,
+  //   dialect: "mysql",
+  //   port: process.env.DB_PORT,
+  // },
   development: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
+    username: "rcortiz",
+    password: "8ik,*IK<",
+    database: "grab_express",
+    host: "172.17.7.100",
     dialect: "mysql",
-    port: process.env.DB_PORT,
+    port: 33061,
   },
   test: {
     username: process.env.DB_USER,

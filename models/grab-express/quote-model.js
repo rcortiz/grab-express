@@ -1,31 +1,32 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../../config/database");
+import { DataTypes, Model } from "sequelize";
+import { sequelize } from "../../config/database.js";
 
-const Quote = sequelize.define(
-  "Quote",
+export class Quote extends Model {}
+
+Quote.init(
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    service_type: {
+    serviceType: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    service_name: {
+    serviceName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    currency_code: {
+    currencyCode: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    currency_symbol: {
+    currencySymbol: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    currency_exponent: {
+    currencyExponent: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -33,11 +34,11 @@ const Quote = sequelize.define(
       type: DataTypes.FLOAT,
       allowNull: false,
     },
-    estimated_pickup: {
+    estimatedPickup: {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    estimated_dropoff: {
+    estimatedDropoff: {
       type: DataTypes.DATE,
       allowNull: false,
     },
@@ -45,43 +46,43 @@ const Quote = sequelize.define(
       type: DataTypes.FLOAT,
       allowNull: false,
     },
-    origin_address: {
+    originAddress: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    origin_city_code: {
+    originCityCode: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    origin_latitude: {
+    originLatitude: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
-    origin_longitude: {
+    originLongitude: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
-    destination_address: {
+    destinationAddress: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    destination_city_code: {
+    destinationCityCode: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    destination_latitude: {
+    destinationLatitude: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
-    destination_longitude: {
+    destinationLongitude: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
   },
   {
+    sequelize,
+    modelName: "Quote",
     timestamps: true,
     underscored: true,
   }
 );
-
-module.exports = Quote;
