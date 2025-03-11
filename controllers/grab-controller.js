@@ -67,7 +67,8 @@ export class GrabController {
         token
       );
 
-      deliveryFee = response.quotes[0].amount;
+      // deliveryFee = response.quotes[0].amount;
+      req.session.deliveryFee = response.quotes[0].amount;
       console.log(deliveryFee);
       res.status(200).json(response);
     } catch (error) {
@@ -77,15 +78,35 @@ export class GrabController {
   }
 
   static async fetchDeliveryQuotes(req, res) {
-    const { deliveryFee } = req.body;
     try {
+      const deliveryFee = req.session.deliveryFee || 0;
       res.status(200).json({
         rates: [
           {
-            service_name: "Grab Express",
+            service_name:
+              "Grab Express delivery fee shouldered by the Recepient",
             service_code: "GRAB_EXPRESS",
-            total_price: parseFloat(deliveryFee).toFixed(2).replace(".", ""),
-            description: "SAMPLE TEXT",
+            // total_price: parseFloat(deliveryFee).toFixed(2).replace(".", ""),
+            total_price: 0,
+            description: "Sample Description",
+            currency: "PHP",
+            min_delivery_time: 30,
+            max_delivery_time: 60,
+          },
+          {
+            service_name: "Grab Express delivery fee shouldered by the Sender",
+            service_code: "GRAB_EXPRESS_1",
+            total_price: 0,
+            description: "Sample Description",
+            currency: "PHP",
+            min_delivery_time: 30,
+            max_delivery_time: 60,
+          },
+          {
+            service_name: "Grab Express Delivery",
+            service_code: "GRAB_EXPRESS_2",
+            total_price: parseFloat(800).toFixed(2).replace(".", ""),
+            description: "Sample Description",
             currency: "PHP",
             min_delivery_time: 30,
             max_delivery_time: 60,
